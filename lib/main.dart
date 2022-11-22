@@ -18,13 +18,26 @@ void main() {
   ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late ThemeProvider themeProvider;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    themeProvider = Provider.of<ThemeProvider>(context);
+    super.didChangeDependencies();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       title: 'ECO-Bee',
       theme: ecoBeeThemeLight,

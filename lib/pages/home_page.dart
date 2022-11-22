@@ -5,34 +5,45 @@ import '../provider/theme_provider.dart';
 import '../provider/weather_provider.dart';
 import '../utils/location_helper_function.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   static const String routeName = '/home_page';
-
-  int once = 0;
 
   Homepage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<WeatherProvider>(context);
-    if(once == 0){
-      currentPosition.call().then((position) {
-        provider.getResponse(position: position);
-      });
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  int once = 0;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    final provider = Provider.of<WeatherProvider>(context, listen: false);
+    if (once == 0) {
+      // currentPosition.call().then((position) {
+      //   provider.getResponse(position: position);
+      // });
       once++;
       print(once.toString());
-      //once = true;
+      super.didChangeDependencies();
     }
+  }
+    @override
+    Widget build(BuildContext context) {
+      print('build called');
 
-
-    print(provider.weatherResponse!.main!.temp!);
+    //print(provider.weatherResponse!.main!.temp!);
     return Scaffold(
       body: ListView(
         children: [
-          ElevatedButton(onPressed: (){
-            Provider.of<ThemeProvider>(context, listen: false).toggleMode();
-            print('pressed');
-          }, child: Text('CLICK'))
+          ElevatedButton(
+              onPressed: () {
+                Provider.of<ThemeProvider>(context, listen: false).toggleMode();
+                print('pressed');
+              },
+              child: Text('CLICK'))
         ],
       ),
     );
