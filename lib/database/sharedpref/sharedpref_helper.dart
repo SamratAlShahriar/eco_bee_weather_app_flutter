@@ -11,5 +11,5 @@ Future<bool> setThemeModeDark(bool darkMode) async {
 
 Future<bool> isThemeModeDark() async{
   final pref = await SharedPreferences.getInstance();
-  return await pref.getBool(theme_mode) ?? false;
+  return pref.getBool(theme_mode) ?? false;
 }

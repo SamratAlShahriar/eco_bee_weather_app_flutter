@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../database/sharedpref/sharedpref_helper.dart';
 
 class ThemeProvider extends ChangeNotifier{
+  ThemeProvider(){
+    getPrefTheme();
+  }
+
   ThemeMode _themeMode = ThemeMode.light;
 
   ThemeMode get themeMode => _themeMode;

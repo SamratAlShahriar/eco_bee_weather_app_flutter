@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../database/http/http_helper.dart';
 import '../model/forecast_response_model.dart';
@@ -9,28 +8,42 @@ import '../utils/constants.dart';
 class WeatherProvider extends ChangeNotifier {
   WeatherResponseModel? weatherResponse;
   ForecastResponseModel? forecastResponse;
+  double _latitude = 0.0;
+  double _longitude = 0.0;
+  String _tempUnit = unitMetric;
+  String unitSymbol = symbolCelsius;
 
-  bool hasDataLoaded = false;
+  bool get hasDataLoaded => weatherResponse != null && forecastResponse != null;
 
-  void getResponse({required Position position, String unit = unitMetric}) async{
-    weatherResponse = await _getWeatherResponse(position: position, unit: unit);
-    forecastResponse = await _getForecastResponse(position: position, unit: unit);
-    if(weatherResponse != null && forecastResponse != null){
-      hasDataLoaded = true;
-    }
-    print('ok');
+  void setUnit(String unit) {
+    _tempUnit = unit;
     notifyListeners();
   }
 
-  Future<WeatherResponseModel> _getWeatherResponse(
-      {required Position position, required String unit}) async {
-    return await HttpHelper.getResponse(
-        type: typeWeather, position: position, unit: unit);
+  void setNewLatLon({required double lat, required double lon}) {
+    _latitude = lat;
+    _longitude = lon;
   }
 
-  Future<ForecastResponseModel> _getForecastResponse(
-      {required Position position, required String unit}) async {
-    return await HttpHelper.getResponse(
-        type: typeForecast, position: position, unit: unit);
+  void getResponses() async {
+    weatherResponse = await _getWeatherResponse();
+    forecastResponse = await _getForecastResponse();
+    notifyListeners();
   }
+
+  Future<WeatherResponseModel> _getWeatherResponse() async =>
+      await HttpHelper.getResponse(
+        type: typeWeather,
+        unit: _tempUnit,
+        latitude: _latitude,
+        longitude: _longitude,
+      );
+
+  Future<ForecastResponseModel> _getForecastResponse() async =>
+      await HttpHelper.getResponse(
+        type: typeForecast,
+        latitude: _latitude,
+        longitude: _longitude,
+        unit: _tempUnit,
+      );
 }

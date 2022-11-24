@@ -39,8 +39,11 @@ dependencies:
   provider:
   intl:
   geolocator:
+  geocoding:
+  google_fonts: 
   shared_preferences:
   http:
+  toggle_switch:
   
 
 dev_dependencies:

@@ -10,16 +10,18 @@ import '../../utils/constants.dart';
 class HttpHelper {
   static Future<dynamic> getResponse(
       {required String type,
-      required Position position,
+      required double latitude,
+      required double longitude,
       required String unit}) async {
-    final response =
-        await http_client.get(Uri.parse(generateUrl(type:type, position: position, unit: unit)));
+    final response = await http_client.get(Uri.parse(generateUrl(
+        type: type, unit: unit, latitude: latitude, longitude: longitude)));
 
     final jsonMap = json.decode(response.body);
-    if(response.statusCode == 200){
-      if(type == typeWeather){
+    print((response.body));
+    if (response.statusCode == 200) {
+      if (type == typeWeather) {
         return WeatherResponseModel.fromJson(jsonMap);
-      } else if(type == typeForecast){
+      } else if (type == typeForecast) {
         return ForecastResponseModel.fromJson(jsonMap);
       }
     }
