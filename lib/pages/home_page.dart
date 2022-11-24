@@ -32,7 +32,7 @@ class _HomepageState extends State<Homepage> {
       weatherProvider = Provider.of<WeatherProvider>(context);
       themeProvider = Provider.of<ThemeProvider>(context);
       settingsProvider = Provider.of<SettingsProvider>(context);
-      _getWeatherData();
+      _getCurrentPositionWeatherData();
       firstTime = false;
     }
     super.didChangeDependencies();
@@ -51,7 +51,7 @@ class _HomepageState extends State<Homepage> {
         actions: [
           IconButton(
               onPressed: () {
-
+                _getCurrentPositionWeatherData();
               },
               icon: const Icon(Icons.my_location)),
           IconButton(onPressed: () {}, icon: Icon(Icons.search))
@@ -74,7 +74,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  void _getWeatherData() {
+  void _getCurrentPositionWeatherData() {
     currentPosition().then((position) {
       weatherProvider.setNewLatLon(
           lat: position.latitude, lon: position.longitude);
