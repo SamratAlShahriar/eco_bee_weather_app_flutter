@@ -1,4 +1,5 @@
 import 'package:eco_bee_weather_app_flutter/custom_widget/forecast_view_single_item.dart';
+import 'package:eco_bee_weather_app_flutter/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -44,14 +45,14 @@ class _HomepageState extends State<Homepage> {
     print('build called');
     return Stack(
       children: [
-        if(weatherProvider.hasDataLoaded)Image.asset(
-          getAppBgImageByWeatherCode(
-            weatherProvider.weatherResponse!.weather!.first.icon!
+        if (weatherProvider.hasDataLoaded)
+          Image.asset(
+            getAppBgImageByWeatherCode(
+                weatherProvider.weatherResponse!.weather!.first.icon!),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
           ),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
         Scaffold(
           drawer: const Drawer(
             child: MainDrawer(),
@@ -66,7 +67,23 @@ class _HomepageState extends State<Homepage> {
                     _getCurrentPositionWeatherData();
                   },
                   icon: const Icon(Icons.my_location)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+              IconButton(
+                  onPressed: () {
+                    showSearch(
+                      context: context,
+                      delegate: _CitySearchDelegate(),
+                    ).then((city) async {
+                      if (city != null && city.isNotEmpty) {
+                        final loc = await convertAddressToLocation(city);
+                        if (loc != null) {
+                          weatherProvider.setNewLatLon(
+                              lat: loc.latitude, lon: loc.longitude);
+                          weatherProvider.getResponses();
+                        }
+                      }
+                    });
+                  },
+                  icon: const Icon(Icons.search))
             ],
           ),
           body: weatherProvider.hasDataLoaded
@@ -355,7 +372,9 @@ class _HomepageState extends State<Homepage> {
                       width: 8,
                     ),
                     Text(
-                      getFormattedDate(weatherProvider.weatherResponse!.sys!.sunrise!, pattern: df12Hour),
+                      getFormattedDate(
+                          weatherProvider.weatherResponse!.sys!.sunrise!,
+                          pattern: df12Hour),
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
@@ -373,7 +392,9 @@ class _HomepageState extends State<Homepage> {
                       width: 8,
                     ),
                     Text(
-                        getFormattedDate(weatherProvider.weatherResponse!.sys!.sunset!, pattern: df12Hour),
+                      getFormattedDate(
+                          weatherProvider.weatherResponse!.sys!.sunset!,
+                          pattern: df12Hour),
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
@@ -408,6 +429,95 @@ class _HomepageState extends State<Homepage> {
             fModel: fItem!,
           );
         },
+      ),
+    );
+  }
+}
+
+class _CitySearchDelegate extends SearchDelegate<String> {
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, '');
+        },
+        icon: const Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              close(context, query);
+            },
+            title: Text(
+              query,
+              style: TextStyle(color: Colors.black87),
+            ),
+            leading: const Icon(Icons.search),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final filteredList = query.isEmpty
+        ? cities
+        : cities
+            .where((city) => city.toLowerCase().startsWith(query.toLowerCase()))
+            .toList();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: ListView.builder(
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) {
+          final item = filteredList[index];
+          return ListTile(
+            onTap: () {
+              query = item;
+              close(context, query);
+            },
+            title: Text(
+              item,
+              style: TextStyle(color: Colors.black87),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return ecoBeeThemeLight.copyWith(
+      textTheme: TextTheme(
+
+      ).apply(
+        bodyColor: Colors.black87,
       ),
     );
   }

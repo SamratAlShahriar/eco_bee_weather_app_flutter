@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Determine the current position of the device.
@@ -54,4 +55,17 @@ Future<dynamic> checkLocationPermission() async {
     return Future.error(
         'Location permissions are permanently denied, we cannot request permissions.');
   }
+}
+
+Future<Location?> convertAddressToLocation(String address) async{
+  try{
+    final locationList = await locationFromAddress(address);
+    if(locationList.isNotEmpty){
+      final location = locationList.first;
+      return location;
+    }
+  }catch(error){
+    print(error.toString());
+  }
+  return null;
 }

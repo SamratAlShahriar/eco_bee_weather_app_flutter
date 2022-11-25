@@ -19,7 +19,9 @@ ThemeData _buildThemeLight() {
 }
 
 TextTheme _buildTextThemeLight(ThemeData baseLight) {
-  return baseLight.textTheme.copyWith().apply(
+  return baseLight.textTheme.copyWith(
+
+  ).apply(
         bodyColor: Colors.white,
       );
 }

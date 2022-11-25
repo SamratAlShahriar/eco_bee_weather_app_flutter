@@ -119,3 +119,12 @@ String getAppBgImageByWeatherCode(String code) {
       return 'assets/images/default.jpg';
   }
 }
+
+const cities = [
+  'Dhaka',
+  'Gazipur',
+  'Naogaon',
+  'Natore',
+  'Sylhet',
+
+];
