@@ -48,7 +48,7 @@ class MainDrawer extends StatelessWidget {
                     } else {
                       weatherProvider.setUnit(unitImperial);
                     }
-                    print(index);
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -93,9 +93,7 @@ class MainDrawer extends StatelessWidget {
                     if (currIndex != index) {
                       themeProvider.toggleMode();
                     }
-                    print(index);
-                    print(currIndex);
-                    print('switched to: $index');
+                    Navigator.pop(context);
                   },
                 ),
               ),

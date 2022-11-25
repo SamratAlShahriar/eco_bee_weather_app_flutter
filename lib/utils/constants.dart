@@ -77,3 +77,45 @@ String getWeatherIconByCode(String code) {
       return '';
   }
 }
+String getAppBgImageByWeatherCode(String code) {
+  switch (code) {
+    case '01d': //clear sky day
+      return 'assets/images/clear_sky.jpg';
+    case '01n': //clear sky night
+      return 'assets/images/clear_sky_n.jpg';
+    case '02d': //few clouds day
+      return 'assets/images/cloudy_sky.jpg';
+    case '02n': //few clouds night
+      return 'assets/images/cloudy_sky.jpg';
+    case '03d': //scattered clouds day
+      return 'assets/images/cloudy_sky.jpg';
+    case '03n': //scattered clouds night
+      return 'assets/images/cloudy_sky.jpg';
+    case '04d': //broken clouds day
+      return 'assets/images/cloudy_sky.jpg';
+    case '04n': //broken clouds night
+      return 'assets/images/cloudy_sky.jpg';
+    case '09d': //shower rain day
+      return 'assets/images/rain.jpg';
+    case '09n': //shower rain night
+      return 'assets/images/rain.jpg';
+    case '10d': //rain day
+      return 'assets/images/rain.jpg';
+    case '10n': //rain night
+      return 'assets/images/rain.jpg';
+    case '11d': //thunderstorm day
+      return 'assets/images/thunder.jpg';
+    case '11n': //thunderstorm night
+      return 'assets/images/thunder.jpg';
+    case '13d': //snow day
+      return 'assets/images/snow.jpg';
+    case '13n': //snow night
+      return 'assets/images/snow.jpg';
+    case '50d': //mist day (haze)
+      return 'assets/images/haze.jpg';
+    case '50n': // mist night (haze)
+      return 'assets/images/haze.jpg';
+    default:
+      return 'assets/images/default.jpg';
+  }
+}

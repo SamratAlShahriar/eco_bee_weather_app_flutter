@@ -43,7 +43,7 @@ class ForecastSingleItemView extends StatelessWidget {
                       (index) => Container(
                             width: 4,
                             height: 1.3,
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 horizontal: 2, vertical: 4),
                             color: Colors.white,
                           )),

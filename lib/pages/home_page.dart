@@ -44,8 +44,10 @@ class _HomepageState extends State<Homepage> {
     print('build called');
     return Stack(
       children: [
-        Image.asset(
-          'assets/images/clear_sky.jpg',
+        if(weatherProvider.hasDataLoaded)Image.asset(
+          getAppBgImageByWeatherCode(
+            weatherProvider.weatherResponse!.weather!.first.icon!
+          ),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
@@ -73,7 +75,7 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       _sectionCurrentWeather(),
                       _sectionCurrentWeatherOthersInfo(),
-                      _sectionForcastWeather(),
+                      _sectionForecastWeather(),
                     ],
                   ),
                 )
@@ -160,6 +162,32 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ]),
                   ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Feels like : ',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            text: weatherProvider.weatherResponse?.main?.temp
+                                    ?.toStringAsFixed(1) ??
+                                '0',
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                            ),
+                            children: [
+                              TextSpan(text: symbolDegree, children: [
+                                TextSpan(text: weatherProvider.unitSymbol),
+                              ]),
+                            ]),
+                      ),
+                    ],
+                  )
                 ],
               ),
               Column(
@@ -181,37 +209,184 @@ class _HomepageState extends State<Homepage> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                            'Max : ${weatherProvider.weatherResponse?.main?.tempMax ?? 0}'),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                            'Min : ${weatherProvider.weatherResponse?.main?.tempMin ?? 0}'),
-                      ],
-                    ),
-                    Text(
-                        'Wind : ${weatherProvider.weatherResponse?.wind?.speed ?? 0}')
-                  ],
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
   }
 
-  Widget _sectionForcastWeather() {
+  Widget _sectionCurrentWeatherOthersInfo() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 8,
+      ),
+      height: 250,
+      decoration: BoxDecoration(color: Colors.black.withOpacity(0.2)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(text: '(min) ', children: [
+                    TextSpan(
+                        text:
+                            '${weatherProvider.weatherResponse?.main?.tempMin}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                        children: const [
+                          TextSpan(text: symbolDegree),
+                        ]),
+                  ]),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                SvgPicture.asset(
+                  'assets/icons/thermometer.svg',
+                  height: 24,
+                  width: 24,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                RichText(
+                  text: TextSpan(
+                      text: '${weatherProvider.weatherResponse?.main?.tempMax}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
+                      children: const [
+                        TextSpan(
+                            text: symbolDegree,
+                            children: [TextSpan(text: ' (max)')]),
+                      ]),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/humidity.svg',
+                  height: 24,
+                  width: 24,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  '${weatherProvider.weatherResponse?.main?.humidity}%',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/wind.svg',
+                  height: 24,
+                  width: 24,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  '${weatherProvider.weatherResponse?.wind?.speed}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/pressure.svg',
+                  height: 24,
+                  width: 24,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  '${weatherProvider.weatherResponse?.main?.pressure} hPa',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/sunrise.svg',
+                      height: 24,
+                      width: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      getFormattedDate(weatherProvider.weatherResponse!.sys!.sunrise!, pattern: df12Hour),
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/sunset.svg',
+                      height: 24,
+                      width: 24,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                        getFormattedDate(weatherProvider.weatherResponse!.sys!.sunset!, pattern: df12Hour),
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionForecastWeather() {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -233,26 +408,6 @@ class _HomepageState extends State<Homepage> {
             fModel: fItem!,
           );
         },
-      ),
-    );
-  }
-
-  Widget _sectionCurrentWeatherOthersInfo() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 8,
-      ),
-      height: 200,
-      decoration: BoxDecoration(color: Colors.black.withOpacity(0.2)),
-      child: Column(
-        children: [
-          Row(),
-        ],
       ),
     );
   }
