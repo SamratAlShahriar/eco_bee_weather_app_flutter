@@ -13,7 +13,7 @@ ThemeData _buildThemeDark() {
 ThemeData _buildThemeLight() {
   ThemeData baseLight = ThemeData.light();
   return baseLight.copyWith(
-    scaffoldBackgroundColor: Colors.blueAccent,
+    scaffoldBackgroundColor: Colors.black.withOpacity(0.25),
     textTheme: _buildTextThemeLight(baseLight),
   );
 }

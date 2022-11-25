@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http_client;
 
 import '../../model/forecast_response_model.dart';
@@ -17,7 +16,6 @@ class HttpHelper {
         type: type, unit: unit, latitude: latitude, longitude: longitude)));
 
     final jsonMap = json.decode(response.body);
-    print((response.body));
     if (response.statusCode == 200) {
       if (type == typeWeather) {
         return WeatherResponseModel.fromJson(jsonMap);

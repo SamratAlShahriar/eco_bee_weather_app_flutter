@@ -1,5 +1,6 @@
 import 'package:eco_bee_weather_app_flutter/custom_widget/forecast_view_single_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../menu/main_drawer.dart';
@@ -41,36 +42,48 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     print('build called');
-    return Scaffold(
-      drawer: const Drawer(
-        child: MainDrawer(),
-      ),
-      appBar: AppBar(
-        title: Text(
-            "${weatherProvider.weatherResponse?.name ?? ''}, ${weatherProvider.weatherResponse?.sys?.country ?? ''}"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _getCurrentPositionWeatherData();
-              },
-              icon: const Icon(Icons.my_location)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.search))
-        ],
-      ),
-      body: weatherProvider.hasDataLoaded
-          ? SingleChildScrollView(
-              child: Column(
-                children: [
-                  _sectionCurrentWeather(),
-                  _sectionForcastWeather(),
-                ],
-              ),
-            )
-          : const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/images/clear_sky.jpg',
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
+        Scaffold(
+          drawer: const Drawer(
+            child: MainDrawer(),
+          ),
+          appBar: AppBar(
+            backgroundColor: Colors.black.withOpacity(0.25),
+            title: Text(
+                "${weatherProvider.weatherResponse?.name ?? ''}, ${weatherProvider.weatherResponse?.sys?.country ?? ''}"),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    _getCurrentPositionWeatherData();
+                  },
+                  icon: const Icon(Icons.my_location)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+            ],
+          ),
+          body: weatherProvider.hasDataLoaded
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _sectionCurrentWeather(),
+                      _sectionCurrentWeatherOthersInfo(),
+                      _sectionForcastWeather(),
+                    ],
+                  ),
+                )
+              : const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                ),
+        ),
+      ],
     );
   }
 
@@ -151,14 +164,10 @@ class _HomepageState extends State<Homepage> {
               ),
               Column(
                 children: [
-                  Image.network(
-                    generateWeatherIconUrl(
+                  SvgPicture.asset(
+                    getWeatherIconByCode(
                         weatherProvider.weatherResponse!.weather!.first!.icon!),
-                    height: 48,
-                    width: 48,
-                  ),
-                  SizedBox(
-                    height: 8,
+                    height: 70,
                   ),
                   Text(
                     weatherProvider
@@ -224,6 +233,26 @@ class _HomepageState extends State<Homepage> {
             fModel: fItem!,
           );
         },
+      ),
+    );
+  }
+
+  Widget _sectionCurrentWeatherOthersInfo() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 8,
+      ),
+      height: 200,
+      decoration: BoxDecoration(color: Colors.black.withOpacity(0.2)),
+      child: Column(
+        children: [
+          Row(),
+        ],
       ),
     );
   }
