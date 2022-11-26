@@ -60,8 +60,10 @@ class _HomepageState extends State<Homepage> {
           ),
           appBar: AppBar(
             backgroundColor: Colors.black.withOpacity(0.25),
-            title: Text(
-                "${weatherProvider.weatherResponse?.name ?? ''}, ${weatherProvider.weatherResponse?.sys?.country ?? ''}"),
+            title: weatherProvider.hasDataLoaded
+                ? Text(
+                    "${weatherProvider.weatherResponse?.name ?? ''}, ${weatherProvider.weatherResponse?.sys?.country ?? ''}")
+                : Text('Eco Bee'),
             actions: [
               IconButton(
                   onPressed: () {
