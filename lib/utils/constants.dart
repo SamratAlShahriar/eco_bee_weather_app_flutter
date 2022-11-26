@@ -121,10 +121,17 @@ String getAppBgImageByWeatherCode(String code) {
 }
 
 const cities = [
+  'Cox\'s-bazar'
+  'Cumilla'
   'Dhaka',
   'Gazipur',
   'Naogaon',
   'Natore',
+  'Rajshahi',
+  'Rangpur'
   'Sylhet',
-
+  'Doha',
+  'Delli',
+  'Newyork'
+  'London',
 ];

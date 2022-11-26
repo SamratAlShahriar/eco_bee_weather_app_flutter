@@ -130,6 +130,7 @@ class _HomepageState extends State<Homepage> {
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.2)),
       child: Column(
         children: [
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -329,10 +330,11 @@ class _HomepageState extends State<Homepage> {
                 const SizedBox(
                   width: 8,
                 ),
-                Text(
-                  '${weatherProvider.weatherResponse?.wind?.speed}',
-                  style: TextStyle(fontSize: 18),
-                ),
+
+                Row(children: [
+                  Text('${weatherProvider.weatherResponse?.wind?.speed ?? 0}'),
+                  Text(weatherProvider.isMetric ? ' m/s':' mi/h')
+                ],),
               ],
             ),
             const SizedBox(
