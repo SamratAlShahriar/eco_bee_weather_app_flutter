@@ -45,14 +45,15 @@ class _HomepageState extends State<Homepage> {
     print('build called');
     return Stack(
       children: [
-        if (weatherProvider.hasDataLoaded)
-          Image.asset(
-            getAppBgImageByWeatherCode(
-                weatherProvider.weatherResponse!.weather!.first.icon!),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
+        Image.asset(
+          weatherProvider.hasDataLoaded
+              ? getAppBgImageByWeatherCode(
+                  weatherProvider.weatherResponse!.weather!.first.icon!)
+              : 'assets/images/default.jpg',
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
         Scaffold(
           drawer: const Drawer(
             child: MainDrawer(),
@@ -435,7 +436,6 @@ class _HomepageState extends State<Homepage> {
 }
 
 class _CitySearchDelegate extends SearchDelegate<String> {
-
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -514,9 +514,7 @@ class _CitySearchDelegate extends SearchDelegate<String> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ecoBeeThemeLight.copyWith(
-      textTheme: TextTheme(
-
-      ).apply(
+      textTheme: TextTheme().apply(
         bodyColor: Colors.black87,
       ),
     );
