@@ -128,7 +128,7 @@ const cities = [
   'Naogaon',
   'Natore',
   'Rajshahi',
-  'Rangpur'
+  'Rangpur',
   'Sylhet',
   'Doha',
   'Delli',
