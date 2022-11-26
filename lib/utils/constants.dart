@@ -121,8 +121,8 @@ String getAppBgImageByWeatherCode(String code) {
 }
 
 const cities = [
-  'Cox\'s-bazar'
-  'Cumilla'
+  'Cox\'s-bazar',
+  'Cumilla',
   'Dhaka',
   'Gazipur',
   'Naogaon',
