@@ -132,6 +132,6 @@ const cities = [
   'Sylhet',
   'Doha',
   'Delli',
-  'Newyork'
+  'Newyork',
   'London',
 ];
